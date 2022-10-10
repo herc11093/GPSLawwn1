@@ -22,6 +22,7 @@ def GetGPSS_Cord():
     global serialPort
     OpenSERPort()
     while True:
+
         str = serialPort.readline()
         parseGPS(str)
 
