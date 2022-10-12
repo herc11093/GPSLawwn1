@@ -21,7 +21,7 @@ PointY = []
 filename  = timestr+"_logtrack.csv"
 flogtrack= open(filename,"w+")
 Qual =0
-GV.dist = 0
+dist = 0
 #next section for to compensate for error drift
 ErrDist =[0,0,0,0,0,0,0,0,0,0]
 CurPathAng = 0

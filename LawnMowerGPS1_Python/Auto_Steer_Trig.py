@@ -20,6 +20,13 @@ def FindC(x1,y1,m):
     c = y1 - m*x1
     return c
 
+def GetAngle(x1,y1,x2,y2):
+    xx= x1-x2
+    yy =y1-y2
+    ang = math.atan2(yy,xx)
+    ang = ang*57.2958
+    return ang
+
 
 
 def shortest_distance(x1, y1, m, c):
