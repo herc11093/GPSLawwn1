@@ -109,10 +109,10 @@ def FieldRunLoop():
             #Drift error compensation section
             if GV.Left:
                 GV.dist = GV.dist*(-1)
-            if (GV.dist > 0 AND GV.dist <1.5):
+            if (GV.dist > 0 AND GV.dist <1.0):
                 GV.ErrDist.append(GV.dist)
         #        GV.ErrDist.pop(0)
-            if (GV.dist < 0 AND GV.dist >-1.5):
+            if (GV.dist < 0 AND GV.dist >-1.0):
                 GV.ErrDist.append(GV.dist)
         #        GV.ErrDist.pop(0)
 
