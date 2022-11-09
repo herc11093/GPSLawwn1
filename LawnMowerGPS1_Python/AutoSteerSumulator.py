@@ -5,11 +5,14 @@ import keyboard
 import random
 
 currentheader = 0
+GV.SerialPort_On = False
+GV.currentx1 = 100
+GV.currenty1 = 100
 
 def Runsimulator():
 #    global GV.SteerAng ,GV.startx ,GV.currentheader ,GV.currentx1 ,GV.currenty1,GV.Set_SteerAng,Simstopstart
 
-    Speed = 1   # 1M per second
+    Speed = 0.5   # 1M per second
 #    GV.currentx1 = GV.startx
 #    GV.currenty1 = GV.startx -20
     #currentheader = 0
@@ -18,6 +21,7 @@ def Runsimulator():
 #    GV.Set_SteerAng = 0
     print("Start_Simulator")
     while GV.Simstopstart == 1:
+        
         if GV.Set_SteerAng-GV.Steerangle>20:
             GV.Steerangle = GV.Steerangle + 20
         elif GV.Set_SteerAng - GV.Steerangle > 6:
@@ -55,12 +59,14 @@ def Runsimulator():
         elif GV.Steerangle < -1:
            GV.gogo = GV.gogo - 1
         
-        if GV.SerialPort_On == true:  #if serial port turned on readback number from ESP32 
+        if GV.SerialPort_On == True:  #if serial port turned on readback number from ESP32 
             SerialString = GV.ser.readline()
             GV.gogo = int(SerialString)#*0.0174533
-
-        newx = GV.currentx1 + Speed* math.cos(math.radians(GV.gogo))+(random.randint(-10,10)*0.1)
-        newy = GV.currenty1 + Speed* math.sin(math.radians(GV.gogo))+(random.randint(-10,10)*0.1)
+         
+        #GV.gogo = GV.Steerangle
+        print(" Set_SteerAng  Steerangle",GV.Set_SteerAng,GV.Steerangle)
+        newx = GV.currentx1 + Speed* math.sin(math.radians(GV.gogo))#+(random.randint(-1,1)*0.1)
+        newy = GV.currenty1 + Speed* math.cos(math.radians(GV.gogo))#+(random.randint(-1,1)*0.1)
         a = Speed* math.cos(math.radians(GV.gogo))
         b = Speed* math.sin(math.radians(GV.gogo))
     #    print("Sim x y",round(a,2) ,round(b,2))

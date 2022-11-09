@@ -5,12 +5,13 @@
 import GV
 from csv import reader
 # iterate over each line as a ordered dictionary and print only few column by column Number
+with open('field1.csv', 'r') as read_obj:#Simulator file
 #with open('field2.csv', 'r') as read_obj:
 #with open('Field3.csv', 'r') as read_obj:
 #with open('Field5.csv', 'r') as read_obj:#bottom lawn
 #with open('Field5c.csv', 'r') as read_obj:#near goal
-print ("Loading Field6.csv")
-with open('Field6.csv', 'r') as read_obj:#Rear garden 3 sections
+#print ("Loading Field6.csv")
+#with open('Field6.csv', 'r') as read_obj:#Rear garden 3 sections
     csv_reader = reader(read_obj)
     
     for row in csv_reader:

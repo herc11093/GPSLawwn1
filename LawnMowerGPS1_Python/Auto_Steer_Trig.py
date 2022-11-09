@@ -20,13 +20,6 @@ def FindC(x1,y1,m):
     c = y1 - m*x1
     return c
 
-def GetAngle(x1,y1,x2,y2):
-    xx= x1-x2
-    yy =y1-y2
-    ang = math.atan2(yy,xx)
-    ang = ang*57.2958
-    return ang
-
 
 
 def shortest_distance(x1, y1, m, c):
@@ -42,7 +35,6 @@ def distance2Point(x1,y1,x2,y2):
     b= (y1-y2)*(y1-y2)
     c = math.sqrt(a+b)
     return c
-
 def FindPerpInters(m1,c1,m2,c2):
     n = m1-m2
     d= c2-c1
@@ -80,7 +72,7 @@ def movedixXalongline(sx1,sy1,dis):
     newx = sx1+dis*math.cos(ang)
     newy = sy1+dis*math.sin(ang)
     #print(newx,newy)
-    
+
     return newx
 
 
@@ -96,7 +88,7 @@ def getSteerAngle():
     # ang = math.atan2((aimy-GV.currenty1 ),(aimx-GV.currentx1))  # origional formula
     ang = math.atan2((aimx-GV.currentx1),(aimy-GV.currenty1 ),)    #rotate angle 90 anti clockwore   swop x and y co-ordinates
 
-    ang = round(math.degrees(ang))
+    ang = round(math.degrees(ang))-GV.CalErr
  
  
     #ang = round(math.degrees(ang))
@@ -112,20 +104,15 @@ def getSteerAngle():
   #      ang =40
   #  if ang < -40:
   #      ang = -40
-    GV.Set_SteerAng = ang
 
-
-
-    #drift error compensation section
+ #drift error compensation section
     angle = math.atan2((aimy-GV.currenty1),(aimx-GV.currentx1))
     angle = GV.CurPathAng - angle
     if angle>0:
            GV.Left = True
     else:
            GV.Left = False
-
-
-
+    GV.Set_SteerAng = ang
   
 def LatLongTM(lat,long):
     p = pyproj.Proj(proj='utm', zone=29, ellps='WGS84')

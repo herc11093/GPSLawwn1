@@ -11,7 +11,10 @@ import socket
 import sys
 
 nmeaser = False
-nmeasoc = True
+nmeasoc = False
+
+#nmeasoc = True   #8/11
+
 if nmeaser == True :
     ser = serial.Serial('/dev/ttyACM0', 38400, timeout=0.1)
     #ser = serial.Serial('COM9', 38400, timeout=0.1)

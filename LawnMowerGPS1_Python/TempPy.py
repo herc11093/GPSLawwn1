@@ -25,6 +25,7 @@ def RunSimFile():
     p = pyproj.Proj(proj='utm', zone=29, ellps='WGS84')
 
     ddd = 0
+    GV.SerialPort_On = False
     for line in file.readlines():
         try:          
             msg = pynmea2.parse(line)

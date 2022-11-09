@@ -30,8 +30,8 @@ GV.starty = 1
 
 #GV.finishx = 200.4
 #GV.finishy = 50.12
-GV.currentx1 = 2
-GV.currenty1 = 2
+GV.currentx1 = 100
+GV.currenty1 = 100
 #GV.CurrentntHeader = 0
 GV.Set_SteerAng = 0.0
 
@@ -62,8 +62,10 @@ def FieldRunLoop():
 
     fieldpoints = len(GV.PointX)-1
     GV.gogo = 0 #90
-    GV.dist =[0]
 
+    GV.ErrDist=[0.001]
+    GV.ErrDist.append(0.001)
+    print("ErrDist "+ str(GV.ErrDist))
 
     #test cords.
 
@@ -94,25 +96,34 @@ def FieldRunLoop():
         lengthofrun = Auto_Steer_Trig.distance2Point(GV.startx,GV.starty,GV.finishx,GV.finishy) #cal max lenght of run
 # take out drift erro form the previous line
 
-        AveErr = sum(GV.ErrDist)/len(GV.ErrDist)
-        if (AveErr) > .075:
-            Gv.gogo = Gv.gogo+AveErr
-        elif (AveErr) < -.075:
-            Gv.gogo = Gv.gogo+AveErr
-        else:
-            GV.gogo = Gv.gogo
-        GV.ErrDist.clear()
+        try:
+            print("Error Distance")
+            print(GV.ErrDist)
+            AveErr = sum(GV.ErrDist)/len(GV.ErrDist)
+            print ("Error updated    " + str(AveErr))
+            
+        except:
+            AveErr = 0
+            print("Failed  to calculate Ave Error")
+ #       if len(GV.ErrDist)> 40:
+ #           if (AveErr) > .075:
+ #               GV.gogo = GV.gogo+AveErr
+ #           elif (AveErr) < -.075:
+ #               GV.gogo = GV.gogo+AveErr
+ #           else:
+ #               GV.gogo = GV.gogo
+ #       GV.ErrDist.clear()
 
 
         while j == 1:
-            GV.dist = round(Auto_Steer_Trig.shortest_distance(GV.currentx1, GV.currenty1, slopeline, con),2)
+            GV.dist = round(Auto_Steer_Trig.shortest_distance(GV.currentx1, GV.currenty1, slopeline, con),3)
             #Drift error compensation section
             if GV.Left:
                 GV.dist = GV.dist*(-1)
-            if (GV.dist > 0 AND GV.dist <1.0):
+            if (GV.dist > 0 and GV.dist <1.0):
                 GV.ErrDist.append(GV.dist)
         #        GV.ErrDist.pop(0)
-            if (GV.dist < 0 AND GV.dist >-1.0):
+            if (GV.dist < 0 and GV.dist >-1.0):
                 GV.ErrDist.append(GV.dist)
         #        GV.ErrDist.pop(0)
 
@@ -140,7 +151,7 @@ def FieldRunLoop():
             
            
             #print(GV.SerialPort_On)
-            if GV.  SerialPort_On:
+            if GV.SerialPort_On:
                 #GV.ser.write( dd)
                 ser.write(bytes(dd, 'UTF-8'))
             
@@ -176,10 +187,10 @@ def FieldRunLoop():
            #     i=fieldpoints
            #     GV.Simstopstart = 1000
            #     print('Quitting track')
-           #     GV.flogtrack.close
+           #     GV.flogtrack.close 
            #     print("Close File")
                 #GV.ser.close()
-            time.sleep (.05)
+          #  time.sleep (.05)  #changed on 8Nov2022***
 def UpdateGUI():
      global labelcurx,labelcury,labelfinx,labelfiny,labeldist,labelsetang,labelgogo,labeltoend,labelactang
      labelcurx.config(text = round(GV.currentx1,1) )
@@ -265,9 +276,9 @@ print("Starting")
 #thread1 = _thread.start_new_thread(FieldRunLoop(),())
 #thread2 = _thread.start_new_thread(TempPy.RunSimFile(),())
 
-
+status = threading.Thread(target=AutoSteerSumulator.Runsimulator)
 #status = threading.Thread(target=TempPy.RunSimFile)
-status = threading.Thread(target= Serial_NMEA.UbloxRead)
+#status = threading.Thread(target= Serial_NMEA.UbloxRead)
 status.start()
 print("Starting 2")
 status2 = threading.Thread(target=FieldRunLoop)
