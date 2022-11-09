@@ -64,11 +64,11 @@ def Runsimulator():
             GV.gogo = int(SerialString)#*0.0174533
          
         #GV.gogo = GV.Steerangle
-        print(" Set_SteerAng  Steerangle",GV.Set_SteerAng,GV.Steerangle)
+        #print(" Set_SteerAng  Steerangle",GV.Set_SteerAng,GV.Steerangle)
         newx = GV.currentx1 + Speed* math.sin(math.radians(GV.gogo))#+(random.randint(-1,1)*0.1)
         newy = GV.currenty1 + Speed* math.cos(math.radians(GV.gogo))#+(random.randint(-1,1)*0.1)
-        a = Speed* math.cos(math.radians(GV.gogo))
-        b = Speed* math.sin(math.radians(GV.gogo))
+      #  a = Speed* math.cos(math.radians(GV.gogo))
+       # b = Speed* math.sin(math.radians(GV.gogo))
     #    print("Sim x y",round(a,2) ,round(b,2))
 
 

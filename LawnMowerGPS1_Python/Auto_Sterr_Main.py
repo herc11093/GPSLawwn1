@@ -62,7 +62,7 @@ def FieldRunLoop():
 
     fieldpoints = len(GV.PointX)-1
     GV.gogo = 0 #90
-
+    AveErr=0
     GV.ErrDist=[0.001]
     GV.ErrDist.append(0.001)
     print("ErrDist "+ str(GV.ErrDist))
@@ -72,7 +72,7 @@ def FieldRunLoop():
 
     print("Round1")
    # flogtrack= open("logtrack.csv","w+")
-    GV.flogtrack.write("AimAng1,AimAang2,Aimx,Aimy,GV.currentx1,GV.currenty1,GV.startx,GV.starty,GV.finishx,GV.finishy,dist,GV.Set_SteerAng,GV.Steerangle,GV.gogo,GV.ToEndPoint,GVQual")
+    GV.flogtrack.write("AimAng1,AimAang2,Aimx,Aimy,GV.currentx1,GV.currenty1,GV.startx,GV.starty,GV.finishx,GV.finishy,dist,GV.Set_SteerAng,GV.Steerangle,GV.gogo,GV.ToEndPoint,GVQual,AveErr,ErrDeg")
     GV.flogtrack.write('\n')   
 
     for i in range(0 ,(fieldpoints)) :
@@ -98,10 +98,15 @@ def FieldRunLoop():
 
         try:
             print("Error Distance")
-            print(GV.ErrDist)
-            AveErr = sum(GV.ErrDist)/len(GV.ErrDist)
-            print ("Error updated    " + str(AveErr))
-            
+            #print(GV.ErrDist)
+            if len(GV.ErrDist)>100:
+                yy = sum(GV.ErrDist)/len(GV.ErrDist) 
+                if yy > .075 or yy<-.075 :
+                    AveErr=AveErr+yy
+                    xx =    math.atan(AveErr)
+                    GV.AveErrDeg = math.degrees(xx)
+            print ("Error At " + str(AveErr),",",GV.AveErrDeg)
+            GV.ErrDist.clear()
         except:
             AveErr = 0
             print("Failed  to calculate Ave Error")
@@ -138,8 +143,8 @@ def FieldRunLoop():
             #GV.currentx1=round(GV.currentx1,2)
             #GV.currenty1=round(GV.currenty1,2)
 
-            print('{} - {};   {} - {};   {} - {}; error {}   {},{} ,   {}, To End-{}'  .format((round(GV.currentx1,1)), (round(GV.currenty1,1)),(round( GV.startx,1)), (round(GV.starty,1)), (round(GV.finishx,1)), (round(GV.finishy)),round(GV.dist,1), (GV.Set_SteerAng), GV.Steerangle, GV.gogo,GV.ToEndPoint ))           
-            GV.flogtrack.write('{},{},{},{},{},{}, {},{},{},{},{},{}'  .format(GV.currentx1, GV.currenty1, GV.startx, GV.starty, GV.finishx, GV.finishy,GV.dist, GV.Set_SteerAng, GV.Steerangle, GV.gogo,GV.ToEndPoint,GV.Qual ))
+            print('{} - {};   {} - {};   {} - {}; error {}   {},{} ,   {}, To End-{},{},{},{}'  .format((round(GV.currentx1,1)), (round(GV.currenty1,1)),(round( GV.startx,1)), (round(GV.starty,1)), (round(GV.finishx,1)), (round(GV.finishy)),round(GV.dist,1), round(GV.Set_SteerAng,2), round(GV.Steerangle,2), GV.gogo,GV.ToEndPoint,GV.Qual,round(AveErr,2),round(GV.AveErrDeg,2) ))           
+            GV.flogtrack.write('{},{},{},{},{},{}, {},{},{},{},{},{},{},{}'  .format(GV.currentx1, GV.currenty1, GV.startx, GV.starty, GV.finishx, GV.finishy,GV.dist, round(GV.Set_SteerAng,2), round(GV.Steerangle,2), GV.gogo,GV.ToEndPoint,GV.Qual,round(AveErr,3),round(GV.AveErrDeg,3) ))
             GV.flogtrack.write('\n')
             try:
                 UpdateGUI()

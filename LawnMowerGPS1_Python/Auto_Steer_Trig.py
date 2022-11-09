@@ -58,7 +58,7 @@ def get_aim_point(cx1,cy1):
     py = slope2*px+c2
     #print(px,py)
     #aimx = movedixXalongline(px,py,7)#modified 13_may_21
-    aimx = movedixXalongline(px,py,1)  
+    aimx = movedixXalongline(px,py,GV.Movealongdist)  
     aimy = slope * aimx+c
     #print("AimPoint ",round(aimx,2),round(aimy,2))
 
@@ -88,7 +88,7 @@ def getSteerAngle():
     # ang = math.atan2((aimy-GV.currenty1 ),(aimx-GV.currentx1))  # origional formula
     ang = math.atan2((aimx-GV.currentx1),(aimy-GV.currenty1 ),)    #rotate angle 90 anti clockwore   swop x and y co-ordinates
 
-    ang = round(math.degrees(ang))-GV.CalErr
+    ang = round(math.degrees(ang))-GV.CalErr-GV.AveErrDeg
  
  
     #ang = round(math.degrees(ang))

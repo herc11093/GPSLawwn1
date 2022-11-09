@@ -26,8 +26,8 @@ dist = 0
 ErrDist =[0,0,0,0,0,0,0,0,0,0]
 CurPathAng = 0
 Left = False
-Movealongdist = 1
+Movealongdist = 1.0
 Simgogo = 90
-CalErr = 0         #error for simulator to simulate a calibration issue in steerin sensor
-
+CalErr = 20         #error for simulator to simulate a calibration issue in steerin sensor
+AveErrDeg = 0
     
