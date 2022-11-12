@@ -28,6 +28,6 @@ CurPathAng = 0
 Left = False
 Movealongdist = 1.0
 Simgogo = 90
-CalErr = 20         #error for simulator to simulate a calibration issue in steerin sensor
+CalErr = 0         #error for simulator to simulate a calibration issue in steerin sensor
 AveErrDeg = 0
     
