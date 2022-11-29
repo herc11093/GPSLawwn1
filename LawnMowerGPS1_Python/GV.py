@@ -30,4 +30,5 @@ Movealongdist = 1.0
 Simgogo = 90
 CalErr = 0         #error for simulator to simulate a calibration issue in steerin sensor
 AveErrDeg = 0
-    
+Fieldname =""
+

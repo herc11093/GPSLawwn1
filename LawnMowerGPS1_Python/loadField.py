@@ -10,8 +10,8 @@ from csv import reader
 #with open('Field3.csv', 'r') as read_obj:
 #with open('Field5.csv', 'r') as read_obj:#bottom lawn
 #with open('Field5c.csv', 'r') as read_obj:#near goal
-print ("Loading Field6.csv")
-with open('Field6.csv', 'r') as read_obj:#Rear garden 3 sections
+print ("Loading ",GV.Fieldname)
+with open(GV.Fieldname, 'r') as read_obj:#Rear garden 3 sections
     csv_reader = reader(read_obj)
     
     for row in csv_reader:

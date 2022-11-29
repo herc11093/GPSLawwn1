@@ -1,5 +1,5 @@
 import math
-import loadField
+import Serial_NMEA
 import serial
 import GV
 import Auto_Steer_Trig
@@ -10,10 +10,13 @@ import time
 import _thread
 import threading
 import TempPy
-import Serial_NMEA
+
 from tkinter import ttk
 from tkinter.messagebox import showerror
 import tkinter as tk
+
+
+RunSim = False
 
 
 #AutoSteer_Setup.Loadconfigfile()
@@ -35,23 +38,28 @@ GV.currenty1 = 100
 #GV.CurrentntHeader = 0
 GV.Set_SteerAng = 0.0
 
-if GV.SerialPort_On: 
-    #ser=serial.Serial(port = "COM3", baudrate=19200,bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-     ser = serial.Serial(            
-     port='/dev/serial0',
-     baudrate = 19200,
-     parity=serial.PARITY_NONE,
-     stopbits=serial.STOPBITS_ONE,
-     bytesize=serial.EIGHTBITS,
-     timeout=0.1
-     )
-     print ("Starting serl port")
-     tim = "30"
-     ser.write(bytes(tim, 'UTF-8'))
-
 
 def FieldRunLoop():
    # global GV.startx, GV.starty, GV.finishx, GV.finishy, GV.currentx1, GV.currenty1, GV.CurrentHeader, GV.Set_SteerAng,Simstopstart
+
+    import loadField
+    
+
+    if GV.SerialPort_On: 
+        #ser=serial.Serial(port = "COM3", baudrate=19200,bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+         ser = serial.Serial(            
+         port='/dev/serial0',
+         baudrate = 19200,
+         parity=serial.PARITY_NONE,
+         stopbits=serial.STOPBITS_ONE,
+         bytesize=serial.EIGHTBITS,
+         timeout=0.1
+         )
+         print ("Starting serl port")
+         tim = "30"
+         ser.write(bytes(tim, 'UTF-8'))
+
+
   
 
     #load field into array
@@ -72,7 +80,7 @@ def FieldRunLoop():
 
     print("Round1")
    # flogtrack= open("logtrack.csv","w+")
-    GV.flogtrack.write("AimAng1,AimAang2,Aimx,Aimy,GV.currentx1,GV.currenty1,GV.startx,GV.starty,GV.finishx,GV.finishy,dist,GV.Set_SteerAng,GV.Steerangle,GV.gogo,GV.ToEndPoint,GVQual,AveErr,ErrDeg")
+    GV.flogtrack.write("AimAng1,AimAang2,Aimx,Aimy,Currentx1,Currenty1,Sartx,Starty,Finishx,Finishy,dist,Set_SteerAng,Steerangle,gogo,ToEndPoint,Qual,AveErr,ErrDeg")
     GV.flogtrack.write('\n')   
 
     for i in range(0 ,(fieldpoints)) :
@@ -280,12 +288,23 @@ print("Starting")
 
 #thread1 = _thread.start_new_thread(FieldRunLoop(),())
 #thread2 = _thread.start_new_thread(TempPy.RunSimFile(),())
+if RunSim:
+    status = threading.Thread(target=AutoSteerSumulator.Runsimulator)
+    Serial_NMEA.SetInput(False,False)
+    GV.Fieldname = "field1.csv"
+    GV.SerialPort_On = False
+
+else:
+    status = threading.Thread(target= Serial_NMEA.UbloxRead)    
+    Serial_NMEA.SetInput(False,True)
+    GV.Fieldname = "Field6.csv"
+    GV.SerialPort_On = True
 
 #status = threading.Thread(target=AutoSteerSumulator.Runsimulator)
 #status = threading.Thread(target=TempPy.RunSimFile)
-status = threading.Thread(target= Serial_NMEA.UbloxRead)
+#status = threading.Thread(target= Serial_NMEA.UbloxRead)
 status.start()
-sleep(2)
+time.sleep(2)
 
 print("Starting 2")
 status2 = threading.Thread(target=FieldRunLoop)

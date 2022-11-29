@@ -5,7 +5,7 @@ import keyboard
 import random
 
 currentheader = 0
-GV.SerialPort_On = False
+#GV.SerialPort_On = False
 GV.currentx1 = 100
 GV.currenty1 = 100
 
@@ -59,9 +59,9 @@ def Runsimulator():
         elif GV.Steerangle < -1:
            GV.gogo = GV.gogo - 1
         
-        if GV.SerialPort_On == True:  #if serial port turned on readback number from ESP32 
-            SerialString = GV.ser.readline()
-            GV.gogo = int(SerialString)#*0.0174533
+    #    if GV.SerialPort_On == True:  #if serial port turned on readback number from ESP32 
+    #        SerialString = GV.ser.readline()
+    #        GV.gogo = int(SerialString)#*0.0174533
          
         #GV.gogo = GV.Steerangle
         #print(" Set_SteerAng  Steerangle",GV.Set_SteerAng,GV.Steerangle)

@@ -4,8 +4,8 @@ import Auto_Steer_Trig
 import math
 import threading
 import time
-import RPi.GPIO as GPIO 
-#import Serial_NMEA
+#import RPi.GPIO as GPIO 
+import Serial_NMEA
 import tkinter as tk
 from tkinter import ttk
 from tkinter.messagebox import showerror
@@ -178,7 +178,8 @@ def LoadGUI():
     root.mainloop()
 
 def clacpathway():
-    widthoftravel = 0.25
+    #widthoftravel = 0.25
+    widthoftravel = -1
 
     M1 = Auto_Steer_Trig.GetSlope(GV.PointX[0],GV.PointY[0],GV.PointX[1],GV.PointY[1])
     M2 = Auto_Steer_Trig.GetSlope(GV.PointX[1],GV.PointY[1],GV.PointX[2],GV.PointY[2])
@@ -204,10 +205,11 @@ def clacpathway():
 
 
 
+
     print("Starting")
     rowaround = 0
-    for i in range(10):
-        nextpoint = nextPoint(GV.PointX[(0+rowaround)],GV.PointY[(0+rowaround)],ang4,MidX,MidY,widthoftravel)
+    for i in range(7):
+        nextpoint = nextPoint(GV.PointX[(0+rowaround)],GV.PointY[(0+rowaround)],ang1,MidX,MidY,widthoftravel)
         GV.PointX.append(nextpoint[0])
         GV.PointY.append(nextpoint[1])
         print (nextpoint)
@@ -215,7 +217,7 @@ def clacpathway():
         GV.PointX.append(nextpoint[0])
         GV.PointY.append(nextpoint[1])
         print (nextpoint)
-        nextpoint = nextPoint(GV.PointX[(2+rowaround)],GV.PointY[(2+rowaround)],ang2,MidX,MidY,widthoftravel)
+        nextpoint = nextPoint(GV.PointX[(2+rowaround)],GV.PointY[(2+rowaround)],ang3,MidX,MidY,widthoftravel)
         GV.PointX.append(nextpoint[0])
         GV.PointY.append(nextpoint[1])
         print (nextpoint)
@@ -248,9 +250,81 @@ def loadnewpoints():
     importboundry()
 ##    waitbuttonpress()
     clacpathway()
+    obstigalavoid()
     printlisttofile()
     #status.stop()
 
+
+
+def obstigalavoid():
+
+    obj =[]
+    obx = [613494,613502]
+    oby=[5842790,5842760]
+ #   obx = [0,0]
+ #   oby=[0,0]
+    modresx=[]
+    modresy=[]
+
+    for i in range((len(GV.PointX)-1)) :
+        lineslope = Auto_Steer_Trig.GetSlope(GV.PointX[i],GV.PointY[i],GV.PointX[i+1],GV.PointY[i+1])
+        linec = Auto_Steer_Trig.FindC(GV.PointX[i],GV.PointY[i],lineslope)
+        noofhits=0
+        obj.clear()
+        modresx.append(GV.PointX[i])
+        modresy.append(GV.PointY[i])
+
+        for j in range(len(obx)):
+            distoobs = Auto_Steer_Trig.shortest_distance(obx[j],oby[j],lineslope,linec)
+            if distoobs<1.5:
+                dis = Auto_Steer_Trig.distance2Point(GV.PointX[i],GV.PointY[i],obx[j],oby[j])
+                obj.append([dis,j])
+                noofhits=noofhits+1
+        if len(obj)>0:
+            obj.sort()
+            print(obj)
+            print("test")
+            for k in range(len(obj)):
+                #print(obj[k])
+                mpend = -1/lineslope
+                aa= obj[k]
+                print(aa)
+                d= aa[1]
+                print(d)
+
+                cpend = Auto_Steer_Trig.FindC(obx[aa[1]],oby[aa[1]],mpend)
+                x1= Auto_Steer_Trig.FindPerpInters(lineslope,linec,mpend,cpend)
+                y1 = lineslope*x1+linec
+
+                ang = math.atan2((GV.PointY[i+1] -GV.PointY[i]),(GV.PointX[i+1]-GV.PointX[i]))
+                angle = math.atan2((oby[aa[1]]-GV.PointY[i]),(obx[aa[1]]-GV.PointX[i]))
+                angle = angle-ang
+                if angle>0:
+                        ang2 = ang-1.57  #add 90 degree in radians
+                else:
+                        ang2 = ang+1.57  #add 90 degree in radians
+            
+                x2= x1+2*math.cos(ang2)
+                y2= y1+2*math.sin(ang2)
+                x4 = x1+4*math.cos(ang)
+                y4 = y1+4*math.sin(ang)
+                #y4 = lineslope*x4+linec
+                x3 = x4+2*math.cos(ang2)
+                y3 = y4+2*math.sin(ang2)
+                modresx.append(x1)
+                modresy.append(y1)
+                modresx.append(x2)
+                modresy.append(y2)
+                modresx.append(x3)
+                modresy.append(y3)
+                modresx.append(x4)
+                modresy.append(y4)
+
+    print(modresx,modresy)
+    GV.PointX.clear()
+    GV.PointX = modresx.copy()
+    GV.PointY.clear()
+    GV.PointY = modresy.copy()
 
 
 #status = threading.Thread(target= Serial_NMEA.UbloxRead)

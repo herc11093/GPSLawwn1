@@ -10,33 +10,33 @@ import time
 import socket
 import sys
 
-nmeaser = False
-nmeasoc = False
+#nmeaser = False
+#nmeasoc = True
 
 #nmeasoc = True   #8/11
+def SetInput(nmeaser,nmeasoc):
+    if nmeaser == True :
+        ser = serial.Serial('/dev/ttyACM0', 38400, timeout=0.1)
+        #ser = serial.Serial('COM9', 38400, timeout=0.1)
+        sio = io.TextIOWrapper(io.BufferedRWPair(ser, ser))
 
-if nmeaser == True :
-    ser = serial.Serial('/dev/ttyACM0', 38400, timeout=0.1)
+    if nmeasoc == True:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_address = ('127.0.0.1', 2224)
+        print('connecting to {} port {}'.format(*server_address))
+        sock.connect(server_address)
+
+
+
+
+    #ser = serial.Serial('/dev/ttyACM0', 115200, timeout=0.1)
     #ser = serial.Serial('COM9', 38400, timeout=0.1)
-    sio = io.TextIOWrapper(io.BufferedRWPair(ser, ser))
+    #sio = io.TextIOWrapper(io.BufferedRWPair(ser, ser))
 
-if nmeasoc == True:
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_address = ('127.0.0.1', 2224)
-    print('connecting to {} port {}'.format(*server_address))
-    sock.connect(server_address)
-
-
-
-
-#ser = serial.Serial('/dev/ttyACM0', 115200, timeout=0.1)
-#ser = serial.Serial('COM9', 38400, timeout=0.1)
-#sio = io.TextIOWrapper(io.BufferedRWPair(ser, ser))
-
-#sio = open("NMEA.txt", "r")
-timestr = time.strftime("%Y%m%d-%H%M")
-fname = timestr + "NMEA_log.csv"
-fout = open(fname, "a+")
+    #sio = open("NMEA.txt", "r")
+    timestr = time.strftime("%Y%m%d-%H%M")
+    fname = timestr + "NMEA_log.csv"
+    fout = open(fname, "a+")
 
 def readsoc():
     #global sock
