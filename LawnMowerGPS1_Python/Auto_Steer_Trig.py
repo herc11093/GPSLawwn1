@@ -86,10 +86,9 @@ def getSteerAngle():
     slopetopoint = GetSlope(GV.currentx1,GV.currenty1,aimx,aimy)
     #ang = math.atan(slopetopoint)
     # ang = math.atan2((aimy-GV.currenty1 ),(aimx-GV.currentx1))  # origional formula
-    ang = math.atan2((aimx-GV.currentx1),(aimy-GV.currenty1 ),)    #rotate angle 90 anti clockwore   swop x and y co-ordinates
-
-    ang = round(math.degrees(ang))-GV.CalErr-GV.AveErrDeg
- 
+    abg = math.atan2((aimx-GV.currentx1),(aimy-GV.currenty1 ),)    #rotate angle 90 anti clockwore   swop x and y co-ordinates
+    agg = math.degrees(abg)-GV.AveErrDeg
+    ang = round(agg) 
  
     #ang = round(math.degrees(ang))
     #print("AimAngle ",ang)

@@ -36,7 +36,7 @@ if GV.SerialPort_On:
 
 
 
-def TeachField()
+def TeachField():
     cposx = GV.currentx1    
     cposy = GV.currenty1
 

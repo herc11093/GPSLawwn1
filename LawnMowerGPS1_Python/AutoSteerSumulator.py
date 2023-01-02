@@ -6,8 +6,8 @@ import random
 
 currentheader = 0
 #GV.SerialPort_On = False
-GV.currentx1 = 100
-GV.currenty1 = 100
+#GV.currentx1 = GV.PointX[1]
+#GV.currenty1 = GV.PointY[1]
 
 def Runsimulator():
 #    global GV.SteerAng ,GV.startx ,GV.currentheader ,GV.currentx1 ,GV.currenty1,GV.Set_SteerAng,Simstopstart
@@ -21,7 +21,18 @@ def Runsimulator():
 #    GV.Set_SteerAng = 0
     print("Start_Simulator")
     while GV.Simstopstart == 1:
-        
+        if GV.Set_SteerAng>180:
+            print(GV.Set_SteerAng)
+            GV.Set_SteerAng = GV.Set_SteerAng -360
+            print(GV.Set_SteerAng)
+        if GV.Set_SteerAng<-180:
+            print(GV.Set_SteerAng)
+            GV.Set_SteerAng = 360+GV.Set_SteerAng
+            print(GV.Set_SteerAng)
+
+
+
+
         if GV.Set_SteerAng-GV.Steerangle>20:
             GV.Steerangle = GV.Steerangle + 20
         elif GV.Set_SteerAng - GV.Steerangle > 6:
@@ -59,6 +70,12 @@ def Runsimulator():
         elif GV.Steerangle < -1:
            GV.gogo = GV.gogo - 1
         
+
+           if GV.gogo > 180:
+               GV.gogo= GV.gogo -360
+           if GV.gogo < -180:
+               GV.gogo= GV.gogo + 360
+
     #    if GV.SerialPort_On == True:  #if serial port turned on readback number from ESP32 
     #        SerialString = GV.ser.readline()
     #        GV.gogo = int(SerialString)#*0.0174533

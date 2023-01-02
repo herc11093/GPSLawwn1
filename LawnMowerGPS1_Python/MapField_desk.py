@@ -179,7 +179,7 @@ def LoadGUI():
 
 def clacpathway():
     #widthoftravel = 0.25
-    widthoftravel = -1
+    widthoftravel = .42
 
     M1 = Auto_Steer_Trig.GetSlope(GV.PointX[0],GV.PointY[0],GV.PointX[1],GV.PointY[1])
     M2 = Auto_Steer_Trig.GetSlope(GV.PointX[1],GV.PointY[1],GV.PointX[2],GV.PointY[2])
@@ -198,34 +198,48 @@ def clacpathway():
     C4= Auto_Steer_Trig.FindC(GV.PointX[3],GV.PointY[3],M4)
 
 
-    MidX = (GV.PointX[0]+GV.PointX[1]+GV.PointX[2]+GV.PointX[3])/4
-    MidY = (GV.PointY[0]+GV.PointY[1]+GV.PointY[2]+GV.PointY[3])/4
+    MidX1 = (GV.PointX[1]+GV.PointX[2])/2
+    MidY1 = (GV.PointY[1]+GV.PointY[2])/2
+    MidX2 = (GV.PointX[0]+GV.PointX[3])/2
+    MidY2 = (GV.PointY[0]+GV.PointY[3])/2
     print ("Mid")
-    print (MidX,MidY)
+    print (MidX1,MidY1,MidX2,MidY2)
 
 
+    d1 = Auto_Steer_Trig.distance2Point(GV.PointX[1],GV.PointY[1],GV.PointX[2],GV.PointY[2])/(widthoftravel*2)
+    d2 = Auto_Steer_Trig.distance2Point(GV.PointX[0],GV.PointY[0],GV.PointX[3],GV.PointY[3])/(widthoftravel*2)
+
+    if d1>d2:
+        dd = int(d1+1)
+    else:
+        dd=int(d2+1)
 
 
     print("Starting")
+    print(d1,d2,dd)
     rowaround = 0
-    for i in range(7):
-        nextpoint = nextPoint(GV.PointX[(0+rowaround)],GV.PointY[(0+rowaround)],ang1,MidX,MidY,widthoftravel)
+    for i in range(dd):
+        nextpoint = nextPoint(GV.PointX[(0+rowaround)],GV.PointY[(0+rowaround)],ang4,MidX2,MidY2,widthoftravel)
         GV.PointX.append(nextpoint[0])
         GV.PointY.append(nextpoint[1])
         print (nextpoint)
-        nextpoint = nextPoint(GV.PointX[(1+rowaround)],GV.PointY[(1+rowaround)],ang2,MidX,MidY,widthoftravel)
+        nextpoint = nextPoint(GV.PointX[(1+rowaround)],GV.PointY[(1+rowaround)],ang2,MidX1,MidY1,widthoftravel)
         GV.PointX.append(nextpoint[0])
         GV.PointY.append(nextpoint[1])
         print (nextpoint)
-        nextpoint = nextPoint(GV.PointX[(2+rowaround)],GV.PointY[(2+rowaround)],ang3,MidX,MidY,widthoftravel)
+        nextpoint = nextPoint(GV.PointX[(2+rowaround)],GV.PointY[(2+rowaround)],ang2,MidX1,MidY1,widthoftravel)
         GV.PointX.append(nextpoint[0])
         GV.PointY.append(nextpoint[1])
         print (nextpoint)
-        nextpoint = nextPoint(GV.PointX[(3+rowaround)],GV.PointY[(3+rowaround)],ang4,MidX,MidY,widthoftravel)
+        nextpoint = nextPoint(GV.PointX[(3+rowaround)],GV.PointY[(3+rowaround)],ang4,MidX2,MidY2,widthoftravel)
         GV.PointX.append(nextpoint[0])
         GV.PointY.append(nextpoint[1])
         print (nextpoint)
         rowaround = rowaround+4
+    #GV.PointX.append(MidX1)
+    #GV.PointY.append(MidY1)
+    #GV.PointX.append(MidX2)
+    #GV.PointY.append(MidY2)
 
 def loadpopints():
     GV.PointX.append(613505.44)
@@ -259,8 +273,10 @@ def loadnewpoints():
 def obstigalavoid():
 
     obj =[]
-    obx = [613494,613502]
-    oby=[5842790,5842760]
+#    obx = [613494,613502]
+#    oby=[5842790,5842760]
+    obx = [613496.783,613501.0707,613505.787,613510.557]
+    oby=[5842734.564,5842728.8829,5842722.9338,5842717.4135]
  #   obx = [0,0]
  #   oby=[0,0]
     modresx=[]
@@ -326,13 +342,14 @@ def obstigalavoid():
     GV.PointY.clear()
     GV.PointY = modresy.copy()
 
+loadnewpoints()
 
 #status = threading.Thread(target= Serial_NMEA.UbloxRead)
 #status.start()
 #time.sleep(2)
-print("Starting 2")
-status2 = threading.Thread(target=loadnewpoints)
-status2.start()
+#print("Starting 2")
+#status2 = threading.Thread(target=loadnewpoints)
+#status2.start()
 
 
 

@@ -3,6 +3,7 @@
 #my_file_data = f.read()
 #f.close()
 import GV
+#GV.Fieldname = "Field10.csv"
 from csv import reader
 # iterate over each line as a ordered dictionary and print only few column by column Number
 #with open('field1.csv', 'r') as read_obj:#Simulator file

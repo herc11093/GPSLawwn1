@@ -7,7 +7,7 @@ import AutoSteerSumulator
 import AutoSteer_Setup
 import keyboard
 import time
-import _thread
+import _thread 
 import threading
 import TempPy
 
@@ -16,8 +16,8 @@ from tkinter.messagebox import showerror
 import tkinter as tk
 
 
-RunSim = False
-
+#RunSim = False
+RunSim = True
 
 #AutoSteer_Setup.Loadconfigfile()
 #load Field Data
@@ -43,7 +43,8 @@ def FieldRunLoop():
    # global GV.startx, GV.starty, GV.finishx, GV.finishy, GV.currentx1, GV.currenty1, GV.CurrentHeader, GV.Set_SteerAng,Simstopstart
 
     import loadField
-    
+    GV.currentx1 = GV.PointX[1]
+    GV.currenty1 = GV.PointY[1]
 
     if GV.SerialPort_On: 
         #ser=serial.Serial(port = "COM3", baudrate=19200,bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
@@ -151,7 +152,7 @@ def FieldRunLoop():
             #GV.currentx1=round(GV.currentx1,2)
             #GV.currenty1=round(GV.currenty1,2)
 
-            print('{} - {};   {} - {};   {} - {}; error {}   {},{} ,   {}, To End-{},{},{},{}'  .format((round(GV.currentx1,1)), (round(GV.currenty1,1)),(round( GV.startx,1)), (round(GV.starty,1)), (round(GV.finishx,1)), (round(GV.finishy)),round(GV.dist,1), round(GV.Set_SteerAng,2), round(GV.Steerangle,2), GV.gogo,GV.ToEndPoint,GV.Qual,round(AveErr,2),round(GV.AveErrDeg,2) ))           
+            print('{} - {};   {} - {};   {} - {}; error {}   {},{} ,   {}, To End-{},{},{},{}'  .format((round(GV.currentx1,1)), (round(GV.currenty1,1)),(round( GV.startx,1)), (round(GV.starty,1)), (round(GV.finishx,1)), (round(GV.finishy)),round(GV.dist,2), round(GV.Set_SteerAng,2), round(GV.Steerangle,2), GV.gogo,GV.ToEndPoint,GV.Qual,round(AveErr,2),round(GV.AveErrDeg,2) ))           
             GV.flogtrack.write('{},{},{},{},{},{}, {},{},{},{},{},{},{},{}'  .format(GV.currentx1, GV.currenty1, GV.startx, GV.starty, GV.finishx, GV.finishy,GV.dist, round(GV.Set_SteerAng,2), round(GV.Steerangle,2), GV.gogo,GV.ToEndPoint,GV.Qual,round(AveErr,3),round(GV.AveErrDeg,3) ))
             GV.flogtrack.write('\n')
             try:
@@ -210,7 +211,7 @@ def UpdateGUI():
      labelcury.config(text = round(GV.currenty1,1) )
      labelfinx.config(text =  round(GV.finishx,1) )
      labelfiny.config(text = round(GV.finishy))
-     labeldist.config(text = round(GV.dist,1) )
+     labeldist.config(text = round(GV.dist,2) )
      labelsetang.config(text = GV.Set_SteerAng )
      labelactang.config(text = GV.Steerangle )
      labelgogo.config(text = GV.gogo)
@@ -291,13 +292,14 @@ print("Starting")
 if RunSim:
     status = threading.Thread(target=AutoSteerSumulator.Runsimulator)
     Serial_NMEA.SetInput(False,False)
-    GV.Fieldname = "field1.csv"
+    GV.Fieldname = "field10.csv"
     GV.SerialPort_On = False
 
 else:
     status = threading.Thread(target= Serial_NMEA.UbloxRead)    
     Serial_NMEA.SetInput(False,True)
-    GV.Fieldname = "Field6.csv"
+    #GV.Fieldname = "Field6.csv"
+    GV.Fieldname = "Field10.csv"
     GV.SerialPort_On = True
 
 #status = threading.Thread(target=AutoSteerSumulator.Runsimulator)
